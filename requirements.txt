@@ -6,3 +6,4 @@ pypdf~=3.12.1
 transformers~=4.30.2
 council-ai==0.0.3
 sentence-transformers==2.2.2
+GitPython==3.1.32

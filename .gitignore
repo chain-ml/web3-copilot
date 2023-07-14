@@ -167,3 +167,6 @@ source-docs/*
 # chroma
 database/chromadb
 
+# generated PDFs
+data/**/*
+!data/README.md

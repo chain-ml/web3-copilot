@@ -1,0 +1,1 @@
+This directory stores the generated PDFs for web3 projects.

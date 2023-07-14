@@ -15,6 +15,7 @@ import constants
 from config import Config
 from retrieval import Retriever
 from skills import DocRetrievalSkill
+from utils import create_file_dict
 
 
 dotenv.load_dotenv()
@@ -45,42 +46,37 @@ class DocRetrievalAgent:
 
     def init_skills(self):
         # Skills for document retrieval
-        self.uni_doc_retrieval_skill = DocRetrievalSkill(db_client=self.db_client, collection_name='uni', retriever=self.retriever)
-        self.avax_doc_retrieval_skill = DocRetrievalSkill(db_client=self.db_client, collection_name='avax', retriever=self.retriever)
-        self.atom_doc_retrieval_skill = DocRetrievalSkill(db_client=self.db_client, collection_name='atom', retriever=self.retriever)
-        self.matic_doc_retrieval_skill = DocRetrievalSkill(db_client=self.db_client, collection_name='matic', retriever=self.retriever)
+        self.doc_retrieval_skills = {}
+
+        indices = list(create_file_dict(constants.DATA_DIR).keys())
+        for index in indices:
+            self.doc_retrieval_skills[index] = DocRetrievalSkill(
+                db_client=self.db_client,
+                collection_name=index,
+                retriever=self.retriever,
+            )
 
         # Skill to interact with LLM
-        self.llm_skill = LLMSkill(llm=self.llm, system_prompt=self.system_prompt, context_messages=self.build_context_message)
+        self.llm_skill = LLMSkill(
+            llm=self.llm,
+            system_prompt=self.system_prompt,
+            context_messages=self.build_context_message
+        )
 
     def init_chains(self) -> List[Chain]:
-        self.uni_doc_retrieval_chain = Chain(
-            name="uni_doc_retrieval",
-            description="Retrieve information from Uniswap's official documentation that contains all information about Uniswap products.",
-            runners=[self.uni_doc_retrieval_skill, self.llm_skill]
-        )
-        self.avax_doc_retrieval_chain = Chain(
-            name="avax_doc_retrieval",
-            description="Retrieve information from Avalanche's official documentation that contains the contents for the Avalanche Developer Documentation.",
-            runners=[self.avax_doc_retrieval_skill, self.llm_skill]
-        )
-        self.atom_doc_retrieval_chain = Chain(
-            name="atom_doc_retrieval",
-            description="Retrieve information from Cosmos' official documentation that contains all information about Cosmos and the Cosmos SDK.",
-            runners=[self.atom_doc_retrieval_skill, self.llm_skill]
-        )
-        self.matic_doc_retrieval_chain = Chain(
-            name="matic_doc_retrieval",
-            description="Retrieve information from Polygon's official documentation that contains all information about the Polygon project.",
-            runners=[self.matic_doc_retrieval_skill, self.llm_skill]
-        )
+        chains = []
 
-        return [
-            self.uni_doc_retrieval_chain,
-            self.avax_doc_retrieval_chain,
-            self.atom_doc_retrieval_chain,
-            self.avax_doc_retrieval_chain
-        ]
+        for index, doc_retrieval_skill in self.doc_retrieval_skills.items():
+            chains.append(
+                Chain(
+                    name=f"{index}_doc_retrieval",
+                    description=toml.load(
+                        "./templates/document_descriptions.toml"
+                    )[index]["description"].format(index=index),
+                    runners=[doc_retrieval_skill, self.llm_skill],
+                )
+            )
+        return chains
 
     def build_context_message(self, context: ChainContext) -> List[LLMMessage]:
         doc_context = context.current.last_message().unwrap().data
@@ -96,8 +92,9 @@ class DocRetrievalAgent:
         result = self.agent.execute(context=self.context, budget=InfiniteBudget())
         return result
 
+
 """
-usage
+sample usage
 """
 agent = DocRetrievalAgent()
 

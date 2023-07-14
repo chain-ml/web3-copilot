@@ -70,7 +70,7 @@ class Config:
             )
             # If the collection is empty, populate the database
             if collection.count() == 0:
-                print(f"{index} has no collection")
+                print(f"{index} has no collection, creating...")
                 # Store text chunks for a directory
                 data = []
                 # Extract text from files

@@ -20,6 +20,12 @@ Web3Copilot is artificial intelligence tool developed using [CouncilAI by ChainM
   - Linux/MacOS: `source venv/bin/activate`
 - Install the project dependencies:
   - `pip install -r requirements.txt`
+- Generate PDF files with either option
+  - Python:
+    - `python generate.py`
+  - Bash:
+    - `cd scripts`
+    - `sh generate-pdfs.sh`
 
 ## Usage
 - `python agent.py`
@@ -34,23 +40,18 @@ Web3Copilot is artificial intelligence tool developed using [CouncilAI by ChainM
 
 ## Adding more docs from web3 projects
 
+> NOTE: For the purpose of this tutorial, the script generates PDFs for projects that use Markdown files (.md) which are stored in the **docs/** folder in their documentation repository.
+
 ### Requirements
 - Node >=12.22
 - npm >= 6.14
+- Git >=1.7
 
-### Setup
-- Create a new folder in **source-docs/** for the web3 project of your choice:
-  - `mkdir avalanche`
-- Clone the project's docs repo into this new folder:
-  - `cd avalanche`
-  - `git clone git@github.com:ava-labs/avalanche-docs.git`
-- Install [md-to-pdf](https://www.npmjs.com/package/md-to-pdf) with npm:
+### Steps
+- Update the `project_repos` dictionary in **generate.py** as desired
+- Install [md-to-pdf](https://github.com/simonhaenisch/md-to-pdf)
   - `npm i -g md-to-pdf`
-- Convert all **.md** files in the appropriate dir (**avalanche-docs/docs/** in this case) using _md-to-pdf_:
-  - `cat avalanche-docs/docs/**/*.md | md-to-pdf > avalanche-docs.pdf`
-- Create a new folder in **data/**:
-  - `mkdir ../data/avax`
-- Copy/move the newly generated PDF file to the data directory:
-  - ` cp avalanche-docs.pdf ../data/avax`
-      
-  
+- Run `python generate.py`
+  - alternatively with bash:
+    - `cd scripts`
+    - `sh generate-pdfs.sh`
