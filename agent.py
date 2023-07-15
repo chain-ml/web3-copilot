@@ -4,12 +4,14 @@ import toml
 
 import dotenv
 
-from council.core import Agent, AgentContext, Budget, ChatHistory, Chain, ChainContext
-from council.core.budget import InfiniteBudget
-from council.llm import OpenAIConfiguration, OpenAILLM, AzureLLM, AzureConfiguration, LLMMessage
-from council.skill import LLMSkill
-from council.controller import LLMController
-from council.evaluator import BasicEvaluator, LLMEvaluator
+from council.agents import Agent
+from council.chains import Chain
+from council.contexts import AgentContext, ChainContext, ChatHistory
+from council.runners.budget import InfiniteBudget
+from council.llm import OpenAILLMConfiguration, OpenAILLM, AzureLLM, AzureLLMConfiguration, LLMMessage
+from council.skills import LLMSkill
+from council.controllers import LLMController
+from council.evaluators import BasicEvaluator, LLMEvaluator
 
 import constants
 from config import Config
@@ -30,7 +32,7 @@ class DocRetrievalAgent:
 
         # Initialize agent
         self.context = AgentContext(chat_history=ChatHistory()) 
-        self.llm = OpenAILLM(config=OpenAIConfiguration.from_env())
+        self.llm = OpenAILLM(config=OpenAILLMConfiguration.from_env())
         # self.llm = AzureLLM(config=AzureConfiguration.from_env())
         self.load_prompts()
         self.init_skills()
@@ -96,6 +98,7 @@ class DocRetrievalAgent:
 """
 sample usage
 """
+
 agent = DocRetrievalAgent()
 
 
