@@ -1,0 +1,1 @@
+This is the directory that will hold any data persisted by Chroma.

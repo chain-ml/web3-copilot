@@ -1,0 +1,12 @@
+[uniswap]
+    description = """
+        Retrieve information from Uniswap's official documentation that contains all information about Uniswap products."""
+[cosmos]
+    description = """
+        Retrieve information from Cosmos' official documentation that contains all information about Cosmos and the Cosmos SDK."""
+[avalanche]
+    description = """
+        Retrieve information from Avalanche's official documentation that contains the contents for the Avalanche Developer Documentation."""
+[polygon]
+    description = """
+        Retrieve information from Polygon's official documentation that contains all information about the Polygon project."""
