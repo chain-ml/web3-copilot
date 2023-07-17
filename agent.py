@@ -7,7 +7,7 @@ import dotenv
 from council.agents import Agent
 from council.chains import Chain
 from council.contexts import AgentContext, ChainContext, ChatHistory
-from council.runners.budget import InfiniteBudget
+from council.runners.budget import Budget
 from council.llm import OpenAILLMConfiguration, OpenAILLM, LLMMessage
 from council.skills import LLMSkill
 from council.controllers import LLMController
@@ -98,6 +98,5 @@ class DocRetrievalAgent:
 
     def interact(self, message):
         self.context.chatHistory.add_user_message(message)
-        # result = self.agent.execute(context=self.context, budget=Budget(60))
-        result = self.agent.execute(context=self.context, budget=InfiniteBudget())
+        result = self.agent.execute(context=self.context, budget=Budget(60))
         return result
