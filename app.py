@@ -6,7 +6,6 @@ import json
 
 app = Flask(__name__)
 
-# TODO: better to have one instance or one per request?
 agent = DocRetrievalAgent()
 
 

@@ -37,12 +37,10 @@ class DocRetrievalAgent:
         # Initialize agent
         self.context = AgentContext(chat_history=ChatHistory()) 
         self.llm = OpenAILLM(config=OpenAILLMConfiguration.from_env())
-        # self.llm = AzureLLM(config=AzureConfiguration.from_env())
         self.load_prompts()
         self.init_skills()
         chains = self.init_chains()
         self.controller = LLMController(llm=self.llm, top_k_execution_plan=1)
-        # self.evaluator = BasicEvaluator()
         self.evaluator = LLMEvaluator(self.llm)
         self.agent = Agent(self.controller, chains, self.evaluator)
 
