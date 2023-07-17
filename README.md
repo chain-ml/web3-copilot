@@ -28,7 +28,20 @@ Web3Copilot is artificial intelligence tool developed using [CouncilAI by ChainM
     - `sh generate-pdfs.sh`
 
 ## Usage
-- `python agent.py`
+
+### Run Agent Demo
+- `python demo.py`
+
+### Run Flask App
+
+#### Within a virtual environment
+- `flask run`
+  - If you'd like to run it in debug mode, append the `--debug` flag to the above command
+> Note that this will run on the default Flask port 5000 - http://127.0.0.1:5000
+
+#### From a terminal
+- `python demo.py`
+> Note that this will run on port - http://127.0.0.1:8000
 
 ## Cleanup
 - Delete database
