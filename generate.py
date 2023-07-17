@@ -32,7 +32,8 @@ for project in project_repos:
     print(f"Generating PDF for {project}")
 
     subprocess.run(
-        f'find "{project_repo_dir}/{DOCS_FOLDER}" -type f -name "*.md" -exec cat {{}} \; | md-to-pdf > "{project_data_dir}/{project}-docs.pdf"',
+        f'find "{project_repo_dir}/{DOCS_FOLDER}" -type f -name "*.md" -exec cat {{}} \; \
+        | md-to-pdf > "{project_data_dir}/{project}-docs.pdf"',
         shell=True
     )
 

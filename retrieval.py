@@ -2,7 +2,6 @@ from typing import Any, Dict, List
 
 from chromadb.api.models.Collection import Collection
 
-from sentence_transformers import SentenceTransformer, CrossEncoder
 
 import constants
 from config import Config
@@ -30,7 +29,8 @@ class Retriever:
         return context
 
     def _query_db(self, query: str, k: int, collection: Collection) -> Dict[str, Any]:
-        """Function to retrieve top K documents from the database based on similarity to the query."""
+        """Function to retrieve top K documents
+        from the database based on similarity to the query."""
         # Calculate the embedding for the query
         embedded_query = self.embedding_encoder.encode(
             query, convert_to_tensor=False
@@ -43,7 +43,8 @@ class Retriever:
     def _rank_results(
         self, query: str, db_results: Dict[str, Any], num_results: int
     ) -> Dict[str, Any]:
-        """Function to rank the documents retrieved from the database based on their relevance to
+        """Function to rank the documents retrieved from
+         the database based on their relevance to
         the query using a cross-encoder and returning the top ranked documents."""
 
         ranked_results = {}

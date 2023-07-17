@@ -80,7 +80,8 @@ class PdfExtractor:
     def _split_text(text: str) -> List[str]:
         """Function to split text into elements based on newline characters."""
 
-        # Split text based on occurence of one or more newline characters with zero or more spaces on et
+        # Split text based on occurence of one or
+        # more newline characters with zero or more spaces on et
         text_list = re.split(r"\s*\n\s*", text)
 
         # Remove leading and trailing whitespaces

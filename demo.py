@@ -35,11 +35,11 @@ project_questions = {
 }
 
 for project in project_questions:
-    print(f"---------------------Sending questions about {project}---------------------")
+    print(f"------------------Sending questions about {project}------------------")
 
     for question in project_questions[project]:
         print(question)
         web3_copilot_chat(question)
 
-    print(f"---------------------Done with {project} questions---------------------")
+    print(f"------------------Done with {project} questions------------------")
 

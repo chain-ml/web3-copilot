@@ -8,10 +8,10 @@ from council.agents import Agent
 from council.chains import Chain
 from council.contexts import AgentContext, ChainContext, ChatHistory
 from council.runners.budget import InfiniteBudget
-from council.llm import OpenAILLMConfiguration, OpenAILLM, AzureLLM, AzureLLMConfiguration, LLMMessage
+from council.llm import OpenAILLMConfiguration, OpenAILLM, LLMMessage
 from council.skills import LLMSkill
 from council.controllers import LLMController
-from council.evaluators import BasicEvaluator, LLMEvaluator
+from council.evaluators import LLMEvaluator
 
 import constants
 from config import Config
@@ -26,7 +26,11 @@ class DocRetrievalAgent:
 
     def __init__(self):
         # Initialize database dependencies
-        self.config = Config(encoding_name=constants.ENCODING_NAME, embedding_model_name=constants.EMBEDDING_MODEL_NAME, cross_encoder_model_name=constants.CROSS_ENCODER_MODEL_NAME)
+        self.config = Config(
+            encoding_name=constants.ENCODING_NAME,
+            embedding_model_name=constants.EMBEDDING_MODEL_NAME,
+            cross_encoder_model_name=constants.CROSS_ENCODER_MODEL_NAME
+        )
         self.db_client = self.config.initialize()
         self.retriever = Retriever(self.config)
 
@@ -43,8 +47,12 @@ class DocRetrievalAgent:
         self.agent = Agent(self.controller, chains, self.evaluator)
 
     def load_prompts(self):
-        self.system_prompt = toml.load("./templates/doc_retrieval_prompt.toml")['system_message']['prompt']
-        self.prompt_template = Template(toml.load("./templates/doc_retrieval_prompt.toml")['main_prompt']['prompt'])
+        self.system_prompt = toml.load(
+            "./templates/doc_retrieval_prompt.toml"
+        )['system_message']['prompt']
+        self.prompt_template = Template(toml.load(
+            "./templates/doc_retrieval_prompt.toml")['main_prompt']['prompt']
+                                        )
 
     def init_skills(self):
         # Skills for document retrieval

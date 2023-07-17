@@ -1,7 +1,5 @@
-from typing import Dict, List
 import os
 
-import constants
 
 
 def create_file_dict(root_dir: str) -> dict[str, list[str]]:

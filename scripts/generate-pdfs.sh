@@ -35,7 +35,8 @@ for index in "${project_repos[@]}" ; do
 
     echo "Generating PDF for $project_name"
 
-    find "${project_repo_dir}/$project_docs_folder" -type f -name "*.md" -exec cat {} \; | md-to-pdf > "${project_data_dir}/$project_name-docs.pdf"
+    find "${project_repo_dir}/$project_docs_folder" -type f -name "*.md" -exec cat {} \; \
+    | md-to-pdf > "${project_data_dir}/$project_name-docs.pdf"
 
     echo "Generated PDF for $project_name"
 
