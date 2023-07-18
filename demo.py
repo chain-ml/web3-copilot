@@ -29,7 +29,7 @@ project_questions = {
         "How do I setup the keyring for my Cosmos Node?"
     ],
     "matic": [
-        "Is polygon a layer 2 blockchain or a layer 1 blockchains?"
+        "Is Polygon a layer 2 blockchain or a layer 1 blockchains?",
         "How do I bridge assets with supernets?"
     ]
 }
