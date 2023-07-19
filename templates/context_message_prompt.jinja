@@ -1,10 +1,12 @@
 Use the following pieces of context to answer the query.
 If the answer is not provided in the context, do not make up an answer. Instead, respond that you do not know.
-Context:
-{{context}}
 
+CONTEXT:
+{{chain_history.last_message}}
+END CONTEXT.
 
-Query:
-{{query}}
+QUERY:
+{{chat_history.user.last_message}}
+END QUERY.
 
-Answer:
+YOUR ANSWER:

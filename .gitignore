@@ -170,3 +170,5 @@ database/chromadb
 # generated PDFs
 data/**/*
 !data/README.md
+
+.ruff_cache

@@ -1,5 +1,4 @@
 from typing import List
-from string import Template
 from pathlib import Path
 
 import toml
@@ -84,7 +83,7 @@ class DocRetrievalAgent:
         return system_prompt
 
     def build_context_message(self, context: ChainContext) -> List[LLMMessage]:
-        context_message_template = Path("./templates/doc_retrieval_prompt.jinja").read_text()
+        context_message_template = Path("./templates/context_message_prompt.jinja").read_text()
         context_message_prompt = PromptToMessages(
             prompt_builder=PromptBuilder(context_message_template)
         )

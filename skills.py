@@ -22,10 +22,9 @@ class DocRetrievalSkill(SkillBase):
 
         collection = self.db_client.get_or_create_collection(name=self.collection_name)
         query = context.chatHistory.messages[-1].message
-        context = self.retriever.retrieve_docs(query=query, collection=collection)
+        doc_context = self.retriever.retrieve_docs(query=query, collection=collection)
 
         return self.build_success_message(
-            f"Results from {self.collection_name} in database retrieved",
-            data=context
+            f"Results from {self.collection_name} in database retrieved\n{doc_context}",
+            data=doc_context
         )
-    
