@@ -17,13 +17,13 @@ from council.evaluators import LLMEvaluator
 import constants
 from config import Config
 from retrieval import Retriever
-from skills import DocRetrievalSkill
+from skills import DocRetrievalSkill, Web3DebuggerSkill
 from utils import create_file_dict
 
 dotenv.load_dotenv()
 
 
-class DocRetrievalAgent:
+class Web3CopilotAgent:
 
     def __init__(self):
         # Initialize database dependencies
@@ -56,10 +56,23 @@ class DocRetrievalAgent:
                 retriever=self.retriever,
             )
 
-        # Skill to interact with LLM
-        self.llm_skill = LLMSkill(
+        # Skill to interact with LLM for document retrieval
+        self.dr_llm_skill = LLMSkill(
             llm=self.llm,
-            system_prompt=self.load_system_prompt(),
+            system_prompt=self.load_system_prompt("doc_retrieval"),
+            context_messages=self.build_context_message
+        )
+
+
+        # Skills for web3 debugger
+        self.web3_debugger_skill = Web3DebuggerSkill(
+            config=self.config
+        )
+
+        # Skill to interact with LLM web3 debugger
+        self.w3d_llm_skill = LLMSkill(
+            llm=self.llm,
+            system_prompt=self.load_system_prompt("web3_debugger"),
             context_messages=self.build_context_message
         )
 
@@ -71,26 +84,48 @@ class DocRetrievalAgent:
                 Chain(
                     name=f"{index}_doc_retrieval",
                     description=toml.load(
-                        "./templates/document_descriptions.toml"
+                        "./templates/doc_retrieval/document_descriptions.toml"
                     )[index]["description"].format(index=index),
-                    runners=[doc_retrieval_skill, self.llm_skill],
+                    runners=[doc_retrieval_skill, self.dr_llm_skill],
                 )
             )
+
+        web3_debugger_desc = "Provide more details about transactions such as why they failed or succeeded."
+        chains.append(
+            Chain(
+                name="web3_debugger_chain",
+                description=web3_debugger_desc,
+                runners=[self.web3_debugger_skill, self.w3d_llm_skill],
+            )
+        )
+
         return chains
 
-    def load_system_prompt(self):
-        system_prompt = Path("./templates/doc_retrieval_prompt.jinja").read_text()
+    def load_system_prompt(self, skill: str):
+        system_prompt_file = ""
+
+        if skill == "web3_debugger":
+            system_prompt_file = f"./templates/{skill}/system_prompt.jinja"
+        else:
+            system_prompt_file = f"./templates/{skill}/system_prompt.jinja"
+
+        system_prompt = Path(system_prompt_file).read_text()
         return system_prompt
 
     def build_context_message(self, context: ChainContext) -> List[LLMMessage]:
-        context_message_template = Path("./templates/context_message_prompt.jinja").read_text()
+        context_message_template = Path(
+            "./templates/context_message_prompt.jinja"
+        ).read_text()
+
         context_message_prompt = PromptToMessages(
             prompt_builder=PromptBuilder(context_message_template)
         )
 
-        return context_message_prompt.to_user_message(context)
+        messages = context_message_prompt.to_user_message(context)
+        return messages
 
     def interact(self, message):
         self.context.chatHistory.add_user_message(message)
-        result = self.agent.execute(context=self.context, budget=Budget(100))
+
+        result = self.agent.execute(context=self.context, budget=Budget.default())
         return result

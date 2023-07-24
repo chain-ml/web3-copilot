@@ -1,10 +1,11 @@
 toml~=0.10.2
 python-dotenv~=1.0.0
-chromadb~=0.3.27
+chromadb==0.4.2
 tiktoken~=0.4.0
-pypdf~=3.12.1
-transformers~=4.30.2
-council-ai==0.0.6
+pypdf==3.13.0
+transformers==4.31.0
+council-ai==0.0.7
 sentence-transformers==2.2.2
 GitPython==3.1.32
 Flask==2.3.2
+requests==2.31.0
