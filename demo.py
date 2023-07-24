@@ -37,7 +37,7 @@ def demo_doc_retrieval():
         print(f"------------------Sending questions about {project}------------------")
 
         for question in project_questions[project]:
-            print(question)
+            print(f"PROMPT: {question}\n")
             web3_copilot_chat(question)
 
         print(f"------------------Done with {project} questions------------------")
@@ -54,7 +54,7 @@ def demo_web3_debugger():
     ]
 
     for prompt in prompts:
-        print(prompt)
+        print(f"PROMPT: {prompt}\n")
         web3_copilot_chat(prompt)
 
     print("------------------END: Web3 Debugger Skill Demo------------------")

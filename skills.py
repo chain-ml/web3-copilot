@@ -1,5 +1,5 @@
 from council.runners import Budget
-from council.contexts import ChainContext, SkillMessage
+from council.contexts import ChainContext, ChatMessage
 from council.skills import SkillBase
 
 from chromadb import Client
@@ -26,7 +26,7 @@ class DocRetrievalSkill(SkillBase):
         self.collection_name = collection_name
         self.retriever = retriever
 
-    def execute(self, context: ChainContext, budget: Budget) -> SkillMessage:
+    def execute(self, context: ChainContext, budget: Budget) -> ChatMessage:
         collection = self.db_client.get_or_create_collection(name=self.collection_name)
         query = context.chatHistory.messages[-1].message
         doc_context = self.retriever.retrieve_docs(query=query, collection=collection)
@@ -48,8 +48,8 @@ class Web3DebuggerSkill(SkillBase):
         self.token_limit = constants.CONTEXT_TOKEN_LIMIT - 1000
         self.req_count = 0
 
-    def execute(self, context: ChainContext, budget: Budget) -> SkillMessage:
-        query = context.chatHistory.messages[-1].message
+    def execute(self, context: ChainContext, budget: Budget) -> ChatMessage:
+        query = context.chat_history.last_message.message
         tx_hash = self.extract_tx_hash(query)
 
         url = self.config.get("rpc_url")
