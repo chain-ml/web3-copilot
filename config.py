@@ -4,7 +4,7 @@ import os
 
 import chromadb
 import tiktoken
-from chromadb import Client, Settings
+from chromadb import PersistentClient, Settings
 from sentence_transformers import CrossEncoder, SentenceTransformer
 from tiktoken import Encoding
 
@@ -12,6 +12,9 @@ import constants
 from utils import create_file_dict
 from encoder import Encoder
 from extractor import PdfExtractor
+
+
+from dotenv import find_dotenv, get_key
 
 
 class NotInitializedError(Exception):
@@ -33,7 +36,7 @@ class Config:
         self.embedding_model_name = embedding_model_name
         self.cross_encoder_model_name = cross_encoder_model_name
 
-    def initialize(self) -> Client:
+    def initialize(self) -> PersistentClient():
         # Initialize retrieval and ranking models
         self._embedding_encoder = SentenceTransformer(self.embedding_model_name)
         self._cross_encoder_model = CrossEncoder(self.cross_encoder_model_name)
@@ -52,14 +55,11 @@ class Config:
         # Initialize database
         return self._init_database()
 
-    def _init_database(self) -> bool:
+    def _init_database(self) -> PersistentClient():
         logging.info('message="initialize database started"')
-        client = chromadb.Client(
-            Settings(
-                chroma_db_impl="duckdb+parquet",
-                persist_directory=constants.DB_PERSIST_DIR,
-                anonymized_telemetry=False,
-            )
+        client = chromadb.PersistentClient(
+            path=constants.DB_PERSIST_DIR,
+            settings=Settings(anonymized_telemetry=False)
         )
 
         # Return data subdirectories to determine database indices to create
@@ -81,7 +81,19 @@ class Config:
                     data.extend(chunks)
                 # Create document embeddings
                 self._encoder.encodeInCollection(data, collection)
+                print(f"created {index} collection")
 
-        client.persist()
-        logging.info('message="initialize database completed"')
+        logging.info('message="database initialization completed"')
         return client
+
+    def get_web3_config(self):
+        env_path = find_dotenv()
+
+        web3_config = {
+            "rpc_url": get_key(env_path, "ETH_MAINNET_URL"),
+            "tenderly_api_key": get_key(env_path, "TENDERLY_API_KEY"),
+            "block_explorer_api_key": get_key(env_path, "ETHERSCAN_API_KEY"),
+            "etherscan_api": get_key(env_path, "ETHERSCAN_API"),
+        }
+
+        return web3_config

@@ -1,12 +1,13 @@
-from agent import DocRetrievalAgent
+from agent import Web3CopilotAgent
 from council.agents import AgentResult
 from flask import Flask, request
 
 import json
 
+
 app = Flask(__name__)
 
-agent = DocRetrievalAgent()
+agent = Web3CopilotAgent()
 
 
 @app.route("/")
@@ -44,10 +45,11 @@ def chat():
     req_data = request.get_json()
 
     prompt = req_data["prompt"]
-    print(prompt)
+    print(f"request:\n{prompt}")
 
     agent_response = agent.interact(prompt)
     response = serialize_agent_response(agent_response)
+    print(f"response:\n{response}")
 
     return response
 

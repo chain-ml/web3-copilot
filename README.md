@@ -11,6 +11,9 @@ Web3Copilot is an artificial intelligence tool developed using [CouncilAI by Cha
     - API keys for third party tools are not provided.
         - `OPENAI_API_KEY` from [OpenAI](https://platform.openai.com/account/api-keys)
         - `OPENAI_LLM_MODEL` from [OpenAI Models](https://platform.openai.com/docs/models/continuous-model-upgrades)
+        - `ETHERSCAN_API_KEY` from [Etherscan APIs](https://docs.etherscan.io/getting-started/viewing-api-usage-statistics)
+        - `ETH_MAINNET_URL` from [Tenderly Dashboard > Web3 Gateway > Access Key](https://tenderly.co/web3-gateway)
+        - `TENDERLY_API_KEY` from [Tenderly Dashboard > Account Settings > Authorization](https://docs.tenderly.co/simulations-and-forks/reference/configuration-of-api-access#get-an-api-key) 
 - Create a virtual Python environment
   - `python -m venv ./venv`
 - Activate the Python virtual env
@@ -37,11 +40,11 @@ Web3Copilot is an artificial intelligence tool developed using [CouncilAI by Cha
 #### Within a virtual environment
 - `flask run`
   - If you'd like to run it in debug mode, append the `--debug` flag to the above command
-> Note that this will run on the default Flask port 5000 - http://127.0.0.1:5000
+> _NOTE: this will run on the default Flask port 5000 - http://127.0.0.1:5000_
 
 #### From a terminal
-- `python demo.py`
-> Note that this will run on port - http://127.0.0.1:8000
+- `python app.py`
+> _NOTE: this will run on port - http://127.0.0.1:8000_
 
 ## Cleanup
 - Delete database
@@ -53,7 +56,7 @@ Web3Copilot is an artificial intelligence tool developed using [CouncilAI by Cha
 
 ## Adding more docs from web3 projects
 
-> NOTE: For the purpose of this tutorial, the script generates PDFs for projects that use Markdown files (.md) which are stored in the **docs/** folder in their documentation repository.
+> _NOTE: For the purpose of this tutorial, the script generates PDFs for projects that use Markdown files (.md) which are stored in the **docs/** folder in their documentation repository._
 
 ### Requirements
 - Node >=12.22

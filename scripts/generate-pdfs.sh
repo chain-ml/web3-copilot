@@ -4,7 +4,7 @@ project_repos=(
     "uniswap::https://github.com/Uniswap/docs.git"
     "avalanche::https://github.com/ava-labs/avalanche-docs.git"
     "cosmos::https://github.com/cosmos/cosmos-sdk.git"
-    "polygon::https://github.com/maticnetwork/matic-docs.git"
+    "polygon::https://github.com/0xPolygon/wiki.git"
 )
 
 source_docs_dir="../source-docs"
