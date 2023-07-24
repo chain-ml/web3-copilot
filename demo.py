@@ -7,7 +7,7 @@ def web3_copilot_chat(message):
     response = agent.interact(message)
 
     print("---begin agent response---")
-    print(response.try_best_message.unwrap().message)
+    print(response.try_best_message.unwrap_or("no agent message").message)
     print("---end agent response---")
 
 
@@ -40,9 +40,9 @@ def demo_doc_retrieval():
             print(f"PROMPT: {question}\n")
             web3_copilot_chat(question)
 
-        print(f"------------------Done with {project} questions------------------")
+        print(f"------------------Done with {project} questions------------------\n")
 
-    print("------------------END: Doc Retrieval Skill Demo------------------")
+    print("------------------END: Doc Retrieval Skill Demo-----------------\n-")
 
 
 def demo_web3_debugger():
@@ -57,7 +57,7 @@ def demo_web3_debugger():
         print(f"PROMPT: {prompt}\n")
         web3_copilot_chat(prompt)
 
-    print("------------------END: Web3 Debugger Skill Demo------------------")
+    print("------------------END: Web3 Debugger Skill Demo------------------\n")
 
 
 demo_doc_retrieval()

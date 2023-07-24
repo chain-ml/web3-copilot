@@ -105,9 +105,9 @@ class Web3CopilotAgent:
         system_prompt_file = ""
 
         if skill == "web3_debugger":
-            system_prompt_file = "./templates/web3_debugger/system_prompt.jinja"
+            system_prompt_file = f"./templates/{skill}/system_prompt.jinja"
         else:
-            system_prompt_file = "./templates/doc_retrieval/system_prompt.jinja"
+            system_prompt_file = f"./templates/{skill}/system_prompt.jinja"
 
         system_prompt = Path(system_prompt_file).read_text()
         return system_prompt
@@ -127,5 +127,5 @@ class Web3CopilotAgent:
     def interact(self, message):
         self.context.chatHistory.add_user_message(message)
 
-        result = self.agent.execute(context=self.context, budget=Budget(6000))
+        result = self.agent.execute(context=self.context, budget=Budget.default())
         return result
