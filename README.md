@@ -1,5 +1,5 @@
 # web3-copilot
-Web3Copilot is an artificial intelligence tool developed using [CouncilAI by ChainML](https://github.com/chain-ml/council) to assist Web3 users navigate the ecosystem.
+Web3Copilot is an artificial intelligence tool developed using [Council by ChainML](https://github.com/chain-ml/council) to assist Web3 users navigate the ecosystem.
 
 ## Requirements
 - Python >=3.9

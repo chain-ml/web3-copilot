@@ -4,7 +4,7 @@ chromadb==0.4.2
 tiktoken~=0.4.0
 pypdf==3.13.0
 transformers==4.31.0
-council-ai==0.0.7
+council-ai==0.0.8
 sentence-transformers==2.2.2
 GitPython==3.1.32
 Flask==2.3.2

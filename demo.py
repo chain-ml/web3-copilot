@@ -42,7 +42,7 @@ def demo_doc_retrieval():
 
         print(f"------------------Done with {project} questions------------------\n")
 
-    print("------------------END: Doc Retrieval Skill Demo-----------------\n-")
+    print("------------------END: Doc Retrieval Skill Demo------------------\n")
 
 
 def demo_web3_debugger():
