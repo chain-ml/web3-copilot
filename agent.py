@@ -15,6 +15,8 @@ from council.controllers import LLMController
 from council.evaluators import LLMEvaluator
 
 import constants
+import logging
+
 from config import Config
 from retrieval import Retriever
 from skills import DocRetrievalSkill, Web3DebuggerSkill
@@ -22,6 +24,7 @@ from utils import create_file_dict
 
 dotenv.load_dotenv()
 
+logging.getLogger("council").setLevel(logging.DEBUG)
 
 class Web3CopilotAgent:
 
