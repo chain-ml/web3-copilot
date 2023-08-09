@@ -7,7 +7,7 @@ import dotenv
 from council.agents import Agent
 from council.chains import Chain
 from council.contexts import AgentContext, ChainContext, ChatHistory
-from council.runners.budget import Budget
+from council.runners.budget import Budget, Consumption
 from council.llm import OpenAILLMConfiguration, OpenAILLM, LLMMessage
 from council.skills import LLMSkill, PromptToMessages
 from council.prompt import PromptBuilder
@@ -24,7 +24,7 @@ from utils import create_file_dict
 
 dotenv.load_dotenv()
 
-logging.getLogger("council").setLevel(logging.DEBUG)
+logging.getLogger("council").setLevel(logging.ERROR)
 
 class Web3CopilotAgent:
 
@@ -130,5 +130,11 @@ class Web3CopilotAgent:
     def interact(self, message):
         self.context.chatHistory.add_user_message(message)
 
-        result = self.agent.execute(context=self.context, budget=Budget.default())
+        result = self.agent.execute(context=self.context, budget=Budget(
+            60,
+            limits=[
+                Consumption(1, "call", "Web3DebuggerSkill"),
+                Consumption(1, "token", "gpt-4-0613")
+            ]
+        ))
         return result

@@ -60,5 +60,5 @@ def demo_web3_debugger():
     print("------------------END: Web3 Debugger Skill Demo------------------\n")
 
 
-demo_doc_retrieval()
+# demo_doc_retrieval()
 demo_web3_debugger()
