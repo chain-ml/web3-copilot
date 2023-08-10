@@ -71,3 +71,6 @@ Web3Copilot is an artificial intelligence tool developed using [Council by Chain
   - alternatively with bash:
     - `cd scripts`
     - `sh generate-pdfs.sh`
+
+## Tutorial Notebooks
+The `notebooks` directory contains `tutorial_notebook.ipynb`, a council tutorial for creating an Agent with your own Skills and Chains.
