@@ -7,8 +7,8 @@ import dotenv
 from council.agents import Agent
 from council.chains import Chain
 from council.contexts import AgentContext, ChainContext, ChatHistory
-from council.runners.budget import Budget
-from council.llm import OpenAILLMConfiguration, OpenAILLM, LLMMessage
+from council.runners.budget import Budget, Consumption
+from council.llm import OpenAILLM, LLMMessage
 from council.skills import LLMSkill, PromptToMessages
 from council.prompt import PromptBuilder
 from council.controllers import LLMController
@@ -24,7 +24,8 @@ from utils import create_file_dict
 
 dotenv.load_dotenv()
 
-logging.getLogger("council").setLevel(logging.DEBUG)
+logging.getLogger("council").setLevel(logging.ERROR)
+
 
 class Web3CopilotAgent:
 
@@ -40,7 +41,7 @@ class Web3CopilotAgent:
 
         # Initialize agent
         self.context = AgentContext(chat_history=ChatHistory())
-        self.llm = OpenAILLM(config=OpenAILLMConfiguration.from_env())
+        self.llm = OpenAILLM.from_env()
         self.init_skills()
         chains = self.init_chains()
         self.controller = LLMController(llm=self.llm, top_k_execution_plan=1)
@@ -65,7 +66,6 @@ class Web3CopilotAgent:
             system_prompt=self.load_system_prompt("doc_retrieval"),
             context_messages=self.build_context_message
         )
-
 
         # Skills for web3 debugger
         self.web3_debugger_skill = Web3DebuggerSkill(
@@ -130,5 +130,14 @@ class Web3CopilotAgent:
     def interact(self, message):
         self.context.chatHistory.add_user_message(message)
 
-        result = self.agent.execute(context=self.context, budget=Budget.default())
+        api_call_limit = Consumption(10, "call", "API_CALL")
+
+        budget = Budget(
+            60,
+            limits=[
+                api_call_limit,
+            ]
+        )
+
+        result = self.agent.execute(context=self.context, budget=budget)
         return result

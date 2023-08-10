@@ -1,3 +1,5 @@
+[![](https://dcbadge.vercel.app/api/server/DWNCftGQZ3?theme=clean-inverted&logoColor=82C4FF)](https://discord.gg/DWNCftGQZ3)
+
 # web3-copilot
 Web3Copilot is an artificial intelligence tool developed using [Council by ChainML](https://github.com/chain-ml/council) to assist Web3 users navigate the ecosystem.
 
