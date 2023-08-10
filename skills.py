@@ -1,4 +1,4 @@
-from council.runners import Budget
+from council.runners import Budget, Consumption
 from council.contexts import ChainContext, ChatMessage
 from council.skills import SkillBase
 
@@ -65,13 +65,14 @@ class Web3DebuggerSkill(SkillBase):
         })
 
         response = requests.post(url, headers=headers, data=data)
+        budget.add_consumption(Consumption(1, "call", "API_CALL"), self.name)
 
         tx_trace = response.json()["result"]
 
         # addresses = self.extract_all_addresses(json.dumps(tx_trace))
         addresses = self.extract_recipient_addresses(tx_trace)
 
-        contracts = self.fetch_contracts(addresses)
+        contracts = self.fetch_contracts(addresses, budget)
 
         debug_context = {
             "transaction_trace": tx_trace,
@@ -86,7 +87,7 @@ class Web3DebuggerSkill(SkillBase):
             data=debug_context
         )
 
-    def fetch_contracts(self, addresses: list[str]):
+    def fetch_contracts(self, addresses: list[str], budget: Budget):
         api_url = self.config.get("etherscan_api")
         api_key = self.config.get("block_explorer_api_key")
 
@@ -101,6 +102,7 @@ class Web3DebuggerSkill(SkillBase):
                    f"&address={address}"
                    f"&apikey={api_key}")
             response = requests.get(url)
+            budget.add_consumption(Consumption(1, "call", "API_CALL"), self.name)
 
             if response.status_code < 400:
                 result = response.json()["result"]
