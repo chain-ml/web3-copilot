@@ -6,7 +6,7 @@ import dotenv
 
 from council.agents import Agent
 from council.chains import Chain
-from council.contexts import AgentContext, ChainContext, ChatHistory
+from council.contexts import AgentContext, SkillContext, ChatHistory
 from council.runners.budget import Budget, Consumption
 from council.llm import OpenAILLM, LLMMessage
 from council.skills import LLMSkill, PromptToMessages
@@ -14,13 +14,13 @@ from council.prompt import PromptBuilder
 from council.controllers import LLMController
 from council.evaluators import LLMEvaluator
 
-import constants
+from web3_copilot.common import constants
 import logging
 
-from config import Config
-from retrieval import Retriever
-from skills import DocRetrievalSkill, Web3DebuggerSkill
-from utils import create_file_dict
+from web3_copilot.doc_retrieval.config import Config
+from web3_copilot.doc_retrieval import Retriever
+from web3_copilot.skills import DocRetrievalSkill, TransactionDebuggerSkill
+from web3_copilot.common.utils import create_file_dict
 
 dotenv.load_dotenv()
 
@@ -67,15 +67,15 @@ class Web3CopilotAgent:
             context_messages=self.build_context_message
         )
 
-        # Skills for web3 debugger
-        self.web3_debugger_skill = Web3DebuggerSkill(
+        # Skills for transaction debugger
+        self.txn_debugger_skill = TransactionDebuggerSkill(
             config=self.config
         )
 
-        # Skill to interact with LLM web3 debugger
-        self.w3d_llm_skill = LLMSkill(
+        # Skill to interact with LLM transaction debugger
+        self.txn_debugger_llm_skill = LLMSkill(
             llm=self.llm,
-            system_prompt=self.load_system_prompt("web3_debugger"),
+            system_prompt=self.load_system_prompt("txn_debugger"),
             context_messages=self.build_context_message
         )
 
@@ -87,18 +87,18 @@ class Web3CopilotAgent:
                 Chain(
                     name=f"{index}_doc_retrieval",
                     description=toml.load(
-                        "./templates/doc_retrieval/document_descriptions.toml"
+                        "./web3_copilot/templates/doc_retrieval/document_descriptions.toml"
                     )[index]["description"].format(index=index),
                     runners=[doc_retrieval_skill, self.dr_llm_skill],
                 )
             )
 
-        web3_debugger_desc = "Provide more details about transactions such as why they failed or succeeded."
+        txn_debugger_desc = "Provide more details about transactions such as why they failed or succeeded."
         chains.append(
             Chain(
-                name="web3_debugger_chain",
-                description=web3_debugger_desc,
-                runners=[self.web3_debugger_skill, self.w3d_llm_skill],
+                name="txn_debugger_chain",
+                description=txn_debugger_desc,
+                runners=[self.txn_debugger_skill, self.txn_debugger_llm_skill],
             )
         )
 
@@ -107,17 +107,17 @@ class Web3CopilotAgent:
     def load_system_prompt(self, skill: str):
         system_prompt_file = ""
 
-        if skill == "web3_debugger":
-            system_prompt_file = f"./templates/{skill}/system_prompt.jinja"
+        if skill == "txn_debugger":
+            system_prompt_file = f"./web3_copilot/templates/{skill}/system_prompt.jinja"
         else:
-            system_prompt_file = f"./templates/{skill}/system_prompt.jinja"
+            system_prompt_file = f"./web3_copilot/templates/{skill}/system_prompt.jinja"
 
         system_prompt = Path(system_prompt_file).read_text()
         return system_prompt
 
-    def build_context_message(self, context: ChainContext) -> List[LLMMessage]:
+    def build_context_message(self, context: SkillContext) -> List[LLMMessage]:
         context_message_template = Path(
-            "./templates/context_message_prompt.jinja"
+            "./web3_copilot/templates/context_message_prompt.jinja"
         ).read_text()
 
         context_message_prompt = PromptToMessages(

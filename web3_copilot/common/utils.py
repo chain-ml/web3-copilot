@@ -1,7 +1,5 @@
 import os
 
-
-
 def create_file_dict(root_dir: str) -> dict[str, list[str]]:
     file_dict = {}
 

@@ -1,4 +1,4 @@
-from agent import Web3CopilotAgent
+from web3_copilot.agent import Web3CopilotAgent
 
 agent = Web3CopilotAgent()
 
@@ -45,8 +45,8 @@ def demo_doc_retrieval():
     print("------------------END: Doc Retrieval Skill Demo------------------\n")
 
 
-def demo_web3_debugger():
-    print("------------------BEGIN: Web3 Debugger Skill Demo------------------")
+def demo_txn_debugger():
+    print("------------------BEGIN: Transaction Debugger Skill Demo------------------")
 
     prompts = [
         "Why did my txn fail - 0xf6870204a21b88e47e5bc788852905669c61419d676a9a18bfa5a96e9928f70c?",
@@ -57,8 +57,8 @@ def demo_web3_debugger():
         print(f"PROMPT: {prompt}\n")
         web3_copilot_chat(prompt)
 
-    print("------------------END: Web3 Debugger Skill Demo------------------\n")
+    print("------------------END: Transaction Debugger Skill Demo------------------\n")
 
 
 demo_doc_retrieval()
-demo_web3_debugger()
+demo_txn_debugger()

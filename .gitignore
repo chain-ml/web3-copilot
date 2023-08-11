@@ -161,15 +161,15 @@ cython_debug/
 
 
 # source docs
-source-docs/*
-!source-docs/README.md
+web3_copilot/doc_retrieval/data/source_docs/*
+!web3_copilot/doc_retrieval/data/source_docs/README.md
 
-# chroma
+# chroma db
 chroma
-database/chromadb
+web3_copilot/doc_retrieval/data/database/chromadb
 
 # generated PDFs
-data/**/*
-!data/README.md
+web3_copilot/doc_retrieval/data/generated_pdfs/**/*
+!web3_copilot/doc_retrieval/data/generated_pdfs/README.md
 
 .ruff_cache

@@ -8,17 +8,10 @@ from chromadb import PersistentClient, Settings
 from sentence_transformers import CrossEncoder, SentenceTransformer
 from tiktoken import Encoding
 
-import constants
-from utils import create_file_dict
-from encoder import Encoder
-from extractor import PdfExtractor
-
-
-from dotenv import find_dotenv, get_key
-
-
-class NotInitializedError(Exception):
-    pass
+from web3_copilot.common import constants
+from web3_copilot.common.utils import create_file_dict
+from web3_copilot.doc_retrieval import Encoder
+from web3_copilot.doc_retrieval import PdfExtractor
 
 
 class Config:
@@ -86,14 +79,16 @@ class Config:
         logging.info('message="database initialization completed"')
         return client
 
-    def get_web3_config(self):
-        env_path = find_dotenv()
 
-        web3_config = {
-            "rpc_url": get_key(env_path, "ETH_MAINNET_URL"),
-            "tenderly_api_key": get_key(env_path, "TENDERLY_API_KEY"),
-            "block_explorer_api_key": get_key(env_path, "ETHERSCAN_API_KEY"),
-            "etherscan_api": get_key(env_path, "ETHERSCAN_API"),
-        }
 
-        return web3_config
+    @property
+    def embedding_encoder(self):
+        return self._embedding_encoder
+
+    @property
+    def cross_encoder_model(self):
+        return self._cross_encoder_model
+
+    @property
+    def tokenizer(self):
+        return self._tokenizer

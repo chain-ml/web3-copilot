@@ -1,4 +1,4 @@
-from agent import Web3CopilotAgent
+from web3_copilot.agent import Web3CopilotAgent
 from council.agents import AgentResult
 from flask import Flask, request
 

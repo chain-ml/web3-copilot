@@ -25,12 +25,8 @@ Web3Copilot is an artificial intelligence tool developed using [Council by Chain
   - Linux/MacOS: `source venv/bin/activate`
 - Install the project dependencies:
   - `pip install -r requirements.txt`
-- Generate PDF files with either option
-  - Python:
-    - `python generate.py`
-  - Bash:
-    - `cd scripts`
-    - `sh generate-pdfs.sh`
+- Generate PDF files:
+  - `python web3_copilot/doc_retrieval/generate.py`
 
 ## Usage
 
@@ -39,18 +35,12 @@ Web3Copilot is an artificial intelligence tool developed using [Council by Chain
 
 ### Run Flask App
 
-#### Within a virtual environment
-- `flask run`
-  - If you'd like to run it in debug mode, append the `--debug` flag to the above command
-> _NOTE: this will run on the default Flask port 5000 - http://127.0.0.1:5000_
-
-#### From a terminal
 - `python app.py`
 > _NOTE: this will run on port - http://127.0.0.1:8000_
 
 ## Cleanup
 - Delete database
-  - `rm -rf database/chromadb`
+  - `rm -rf web3_copilot/doc_retrieval/data/database/chromadb`
 - Deactivate virtual env
   - `deactivate`
 - (optional) Delete virtual env
@@ -69,10 +59,7 @@ Web3Copilot is an artificial intelligence tool developed using [Council by Chain
 - Update the `project_repos` dictionary in **generate.py** as desired
 - Install [md-to-pdf](https://github.com/simonhaenisch/md-to-pdf)
   - `npm i -g md-to-pdf`
-- Run `python generate.py`
-  - alternatively with bash:
-    - `cd scripts`
-    - `sh generate-pdfs.sh`
+- Run `python web3_copilot/doc_retrieval/generate.py`
 
 ## Tutorial Notebooks
 The `notebooks` directory contains `first_example.ipynb`, an introductory notebook to council.
@@ -86,3 +73,6 @@ The `notebooks` directory also contains `council_getting_started.ipynb`, a counc
 To edit and run the notebook:
 - Go to the following [Google Colab](https://colab.research.google.com/drive/1Tg_DCm92nCXEgslKdHwMc3-nj-Tpn6mO?usp=sharing) link
 - Press File -> Save a Copy in Drive
+
+## ETHToronto Presentation
+[Building AI Agents with ‘Council’](https://docs.google.com/presentation/d/1SHmsxBJOSp6tXP67Nv2LivcREJz2pkI6JU9VKnvxtKo/edit?usp=sharing).
