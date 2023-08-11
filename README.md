@@ -73,3 +73,16 @@ Web3Copilot is an artificial intelligence tool developed using [Council by Chain
   - alternatively with bash:
     - `cd scripts`
     - `sh generate-pdfs.sh`
+
+## Tutorial Notebooks
+The `notebooks` directory contains `first_example.ipynb`, an introductory notebook to council.
+
+To run the notebook:
+- Go to the following [Google Colab](https://colab.research.google.com/drive/15DI-vIaaCPDFr6g49nxugHHqWuugtyRP?usp=sharing) link
+- If you would like to edit the notebook, you must first make a copy: Press File -> Save a Copy in Drive
+
+The `notebooks` directory also contains `council_getting_started.ipynb`, a council tutorial for creating an Agent with your own Skills and Chains.
+
+To edit and run the notebook:
+- Go to the following [Google Colab](https://colab.research.google.com/drive/1Tg_DCm92nCXEgslKdHwMc3-nj-Tpn6mO?usp=sharing) link
+- Press File -> Save a Copy in Drive
