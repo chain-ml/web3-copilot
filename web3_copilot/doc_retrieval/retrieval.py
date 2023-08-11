@@ -2,16 +2,15 @@ from typing import Any, Dict, List
 
 from chromadb.api.models.Collection import Collection
 
-
-import constants
-from config import Config
+from web3_copilot.common import constants
+from .config import Config
 
 
 class Retriever:
     def __init__(self, config: Config):
-        self.embedding_encoder = config._embedding_encoder
-        self.cross_encoder = config._cross_encoder_model
-        self.tokenizer = config._tokenizer
+        self.embedding_encoder = config.embedding_encoder
+        self.cross_encoder = config.cross_encoder_model
+        self.tokenizer = config.tokenizer
 
     def retrieve_docs(self, query: str, collection: Collection) -> Dict[str, Any]:
         """Function to retrieve ranked results from database"""

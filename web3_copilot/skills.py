@@ -4,14 +4,16 @@ from council.skills import SkillBase
 
 from chromadb import Client
 
-from config import Config
-from retrieval import Retriever
+from web3_copilot.doc_retrieval.config import Config
+from web3_copilot.doc_retrieval import Retriever
 
-import constants
+from web3_copilot.common import constants
 
 import json
 import re
 import requests
+
+from dotenv import find_dotenv, get_key
 
 
 class DocRetrievalSkill(SkillBase):
@@ -37,16 +39,28 @@ class DocRetrievalSkill(SkillBase):
         )
 
 
-class Web3DebuggerSkill(SkillBase):
-    """Skill to get details of EVM transactions such as receipts and traces"""
+class TransactionDebuggerSkill(SkillBase):
+    """Skill to explain details of EVM transactions such as receipts and traces"""
 
     def __init__(self, config: Config):
-        super().__init__(name="web3_debugger")
+        super().__init__(name="txn_debugger")
 
         self.tokenizer = config._tokenizer
-        self.config = config.get_web3_config()
+        self.config = self._get_config()
         self.token_limit = constants.CONTEXT_TOKEN_LIMIT - 1000
         self.req_count = 0
+
+    def _get_config(self):
+        env_path = find_dotenv()
+
+        web3_config = {
+            "rpc_url": get_key(env_path, "ETH_MAINNET_URL"),
+            "tenderly_api_key": get_key(env_path, "TENDERLY_API_KEY"),
+            "block_explorer_api_key": get_key(env_path, "ETHERSCAN_API_KEY"),
+            "etherscan_api": get_key(env_path, "ETHERSCAN_API"),
+        }
+
+        return web3_config
 
     def execute(self, context: ChainContext, budget: Budget) -> ChatMessage:
         query = context.chat_history.last_message.message
@@ -69,7 +83,6 @@ class Web3DebuggerSkill(SkillBase):
 
         tx_trace = response.json()["result"]
 
-        # addresses = self.extract_all_addresses(json.dumps(tx_trace))
         addresses = self.extract_recipient_addresses(tx_trace)
 
         contracts = self.fetch_contracts(addresses, budget)
@@ -78,7 +91,6 @@ class Web3DebuggerSkill(SkillBase):
             "transaction_trace": tx_trace,
             "contracts_source_code": contracts
         }
-        # debug_context = json.dumps(tx_trace)
 
         self.req_count += 1
 
@@ -108,7 +120,8 @@ class Web3DebuggerSkill(SkillBase):
                 result = response.json()["result"]
                 details = []
 
-                for res in result: # exclude unverified contracts
+                # exclude unverified contracts
+                for res in result:
                     if res["ContractName"] not in seen and len(res["SourceCode"]) > 0:
                         num_tokens += len(self.tokenizer.encode(res["SourceCode"]))
                         if num_tokens <= self.token_limit:
