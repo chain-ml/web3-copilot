@@ -13,7 +13,7 @@ import json
 import re
 import requests
 
-from dotenv import find_dotenv, get_key
+# TUTORIAL CODE GOES HERE
 
 
 class DocRetrievalSkill(SkillBase):
@@ -23,27 +23,21 @@ class DocRetrievalSkill(SkillBase):
                  db_client: Client,
                  collection_name: str,
                  retriever: Retriever):
-        super().__init__(name="doc_retrieval")
+        # TUTORIAL CODE GOES HERE
         self.db_client = db_client
         self.collection_name = collection_name
         self.retriever = retriever
 
     def execute(self, context: ChainContext, budget: Budget) -> ChatMessage:
-        collection = self.db_client.get_or_create_collection(name=self.collection_name)
-        query = context.chat_history.last_message.message
-        doc_context = self.retriever.retrieve_docs(query=query, collection=collection)
-
-        return self.build_success_message(
-            f"Results from {self.collection_name} in database retrieved\n{doc_context}",
-            data=doc_context
-        )
+        # TUTORIAL CODE GOES HERE
+        pass
 
 
 class TransactionDebuggerSkill(SkillBase):
     """Skill to explain details of EVM transactions such as receipts and traces"""
 
     def __init__(self, config: Config):
-        super().__init__(name="txn_debugger")
+        # TUTORIAL CODE GOES HERE
 
         self.tokenizer = config._tokenizer
         self.config = self._get_config()
@@ -51,19 +45,12 @@ class TransactionDebuggerSkill(SkillBase):
         self.req_count = 0
 
     def _get_config(self):
-        env_path = find_dotenv()
-
-        web3_config = {
-            "rpc_url": get_key(env_path, "ETH_MAINNET_URL"),
-            "tenderly_api_key": get_key(env_path, "TENDERLY_API_KEY"),
-            "block_explorer_api_key": get_key(env_path, "ETHERSCAN_API_KEY"),
-            "etherscan_api": get_key(env_path, "ETHERSCAN_API"),
-        }
-
-        return web3_config
+        # TUTORIAL CODE GOES HERE
+        pass
 
     def execute(self, context: ChainContext, budget: Budget) -> ChatMessage:
-        query = context.chat_history.last_message.message
+        # TUTORIAL CODE GOES HERE
+        query = ""
         tx_hash = self.extract_tx_hash(query)
 
         url = self.config.get("rpc_url")
@@ -79,7 +66,7 @@ class TransactionDebuggerSkill(SkillBase):
         })
 
         response = requests.post(url, headers=headers, data=data)
-        budget.add_consumption(Consumption(1, "call", "API_CALL"), self.name)
+        # TUTORIAL CODE GOES HERE
 
         tx_trace = response.json()["result"]
 
@@ -94,10 +81,8 @@ class TransactionDebuggerSkill(SkillBase):
 
         self.req_count += 1
 
-        return self.build_success_message(
-            f"{debug_context}",
-            data=debug_context
-        )
+        # TUTORIAL CODE GOES HERE
+        return None
 
     def fetch_contracts(self, addresses: list[str], budget: Budget):
         api_url = self.config.get("etherscan_api")
@@ -114,7 +99,7 @@ class TransactionDebuggerSkill(SkillBase):
                    f"&address={address}"
                    f"&apikey={api_key}")
             response = requests.get(url)
-            budget.add_consumption(Consumption(1, "call", "API_CALL"), self.name)
+            # TUTORIAL CODE GOES HERE
 
             if response.status_code < 400:
                 result = response.json()["result"]

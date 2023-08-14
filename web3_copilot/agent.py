@@ -52,32 +52,16 @@ class Web3CopilotAgent:
         # Skills for document retrieval
         self.doc_retrieval_skills = {}
 
-        indices = list(create_file_dict(constants.DATA_DIR).keys())
-        for index in indices:
-            self.doc_retrieval_skills[index] = DocRetrievalSkill(
-                db_client=self.db_client,
-                collection_name=index,
-                retriever=self.retriever,
-            )
+        # TUTORIAL CODE GOES HERE
 
         # Skill to interact with LLM for document retrieval
-        self.dr_llm_skill = LLMSkill(
-            llm=self.llm,
-            system_prompt=self.load_system_prompt("doc_retrieval"),
-            context_messages=self.build_context_message
-        )
+        # TUTORIAL CODE GOES HERE
 
         # Skills for transaction debugger
-        self.txn_debugger_skill = TransactionDebuggerSkill(
-            config=self.config
-        )
+        # TUTORIAL CODE GOES HERE
 
         # Skill to interact with LLM transaction debugger
-        self.txn_debugger_llm_skill = LLMSkill(
-            llm=self.llm,
-            system_prompt=self.load_system_prompt("txn_debugger"),
-            context_messages=self.build_context_message
-        )
+        # TUTORIAL CODE GOES HERE
 
     def init_chains(self) -> List[Chain]:
         chains = []
@@ -89,7 +73,8 @@ class Web3CopilotAgent:
                     description=toml.load(
                         "./web3_copilot/templates/doc_retrieval/document_descriptions.toml"
                     )[index]["description"].format(index=index),
-                    runners=[doc_retrieval_skill, self.dr_llm_skill],
+                    # TUTORIAL CODE GOES HERE
+                    runners=[],
                 )
             )
 
@@ -98,7 +83,8 @@ class Web3CopilotAgent:
             Chain(
                 name="txn_debugger_chain",
                 description=txn_debugger_desc,
-                runners=[self.txn_debugger_skill, self.txn_debugger_llm_skill],
+                # TUTORIAL CODE GOES HERE
+                runners=[],
             )
         )
 
@@ -120,24 +106,14 @@ class Web3CopilotAgent:
             "./web3_copilot/templates/context_message_prompt.jinja"
         ).read_text()
 
-        context_message_prompt = PromptToMessages(
-            prompt_builder=PromptBuilder(context_message_template)
-        )
+        # TUTORIAL CODE GOES HERE
 
-        messages = context_message_prompt.to_user_message(context)
+        messages = []
         return messages
 
     def interact(self, message):
         self.context.chatHistory.add_user_message(message)
 
-        api_call_limit = Consumption(10, "call", "API_CALL")
+        # TUTORIAL CODE GOES HERE
 
-        budget = Budget(
-            60,
-            limits=[
-                api_call_limit,
-            ]
-        )
-
-        result = self.agent.execute(context=self.context, budget=budget)
-        return result
+        return None

@@ -77,5 +77,14 @@ To edit and run this notebook:
 - Go to the following [Google Colab](https://colab.research.google.com/drive/1Tg_DCm92nCXEgslKdHwMc3-nj-Tpn6mO?usp=sharing) link.
 - Press File -> Save a Copy in Drive.
 
+### ETHToronto Tutorial
+
+The **notebooks/** directory contains a file called `Web3Copilot_Tutorial.ipynb`, which has the missing code snippets for the tutorial.
+
+To edit and run this notebook:
+- Go to the following [Google Colab](...) link.
+- Press File -> Save a Copy in Drive.
+
+
 ## ETHToronto Presentation
 [Building AI Agents with ‘Council’](https://docs.google.com/presentation/d/1SHmsxBJOSp6tXP67Nv2LivcREJz2pkI6JU9VKnvxtKo/edit?usp=sharing).
