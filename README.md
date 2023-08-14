@@ -82,7 +82,7 @@ To edit and run this notebook:
 The **notebooks/** directory contains a file called `Web3Copilot_Tutorial.ipynb`, which has the missing code snippets for the tutorial.
 
 To edit and run this notebook:
-- Go to the following [Google Colab](...) link.
+- Go to the following [Google Colab](https://colab.research.google.com/drive/1M8AaS4V9bo9GnOsWqthinahdFok7DK-I?usp=sharing) link.
 - Press File -> Save a Copy in Drive.
 
 
