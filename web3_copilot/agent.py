@@ -6,8 +6,9 @@ import dotenv
 
 from council.agents import Agent
 from council.chains import Chain
-from council.contexts import AgentContext, SkillContext, ChatHistory
-from council.runners.budget import Budget, Consumption
+from council.contexts import AgentContext, SkillContext
+from council.filters import BasicFilter
+from council.contexts import Budget, Consumption
 from council.llm import OpenAILLM, LLMMessage
 from council.skills import LLMSkill, PromptToMessages
 from council.prompt import PromptBuilder
@@ -40,13 +41,12 @@ class Web3CopilotAgent:
         self.retriever = Retriever(self.config)
 
         # Initialize agent
-        self.context = AgentContext(chat_history=ChatHistory())
         self.llm = OpenAILLM.from_env()
         self.init_skills()
         chains = self.init_chains()
-        self.controller = LLMController(llm=self.llm, top_k_execution_plan=1)
+        self.controller = LLMController(chains=chains, llm=self.llm, response_threshold=5)
         self.evaluator = LLMEvaluator(self.llm)
-        self.agent = Agent(self.controller, chains, self.evaluator)
+        self.agent = Agent(self.controller, self.evaluator, filter=BasicFilter(), name="Web3Copilot")
 
     def init_skills(self):
         # Skills for document retrieval
@@ -128,7 +128,6 @@ class Web3CopilotAgent:
         return messages
 
     def interact(self, message):
-        self.context.chatHistory.add_user_message(message)
 
         api_call_limit = Consumption(10, "call", "API_CALL")
 
@@ -139,5 +138,10 @@ class Web3CopilotAgent:
             ]
         )
 
-        result = self.agent.execute(context=self.context, budget=budget)
+        context = AgentContext.from_user_message(message, budget)
+
+        result = self.agent.execute(context=context)
         return result
+
+    def render(self):
+        return self.agent.render_as_json()

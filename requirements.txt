@@ -4,7 +4,7 @@ chromadb==0.4.5
 tiktoken~=0.4.0
 pypdf==3.15.0
 transformers==4.31.0
-council-ai @ git+https://github.com/chain-ml/council@main
+council-ai==0.0.12
 sentence-transformers==2.2.2
 Flask==2.3.2
 requests==2.31.0
