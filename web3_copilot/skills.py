@@ -1,4 +1,4 @@
-from council.runners import Budget, Consumption
+from council.contexts import Budget, Consumption
 from council.contexts import ChainContext, ChatMessage
 from council.skills import SkillBase
 
@@ -28,7 +28,7 @@ class DocRetrievalSkill(SkillBase):
         self.collection_name = collection_name
         self.retriever = retriever
 
-    def execute(self, context: ChainContext, budget: Budget) -> ChatMessage:
+    def execute(self, context: ChainContext) -> ChatMessage:
         collection = self.db_client.get_or_create_collection(name=self.collection_name)
         query = context.chat_history.last_message.message
         doc_context = self.retriever.retrieve_docs(query=query, collection=collection)
@@ -62,7 +62,7 @@ class TransactionDebuggerSkill(SkillBase):
 
         return web3_config
 
-    def execute(self, context: ChainContext, budget: Budget) -> ChatMessage:
+    def execute(self, context: ChainContext) -> ChatMessage:
         query = context.chat_history.last_message.message
         tx_hash = self.extract_tx_hash(query)
 
@@ -79,13 +79,13 @@ class TransactionDebuggerSkill(SkillBase):
         })
 
         response = requests.post(url, headers=headers, data=data)
-        budget.add_consumption(Consumption(1, "call", "API_CALL"), self.name)
+        context.budget.add_consumption(1, "call", "API_CALL")
 
         tx_trace = response.json()["result"]
 
         addresses = self.extract_recipient_addresses(tx_trace)
 
-        contracts = self.fetch_contracts(addresses, budget)
+        contracts = self.fetch_contracts(addresses, context.budget)
 
         debug_context = {
             "transaction_trace": tx_trace,
@@ -114,7 +114,7 @@ class TransactionDebuggerSkill(SkillBase):
                    f"&address={address}"
                    f"&apikey={api_key}")
             response = requests.get(url)
-            budget.add_consumption(Consumption(1, "call", "API_CALL"), self.name)
+            budget.add_consumption(1, "call", "API_CALL")
 
             if response.status_code < 400:
                 result = response.json()["result"]

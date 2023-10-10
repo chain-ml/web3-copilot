@@ -62,3 +62,5 @@ def demo_txn_debugger():
 
 demo_doc_retrieval()
 demo_txn_debugger()
+
+# print(f"\n{agent.render()}")
