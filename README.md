@@ -61,21 +61,11 @@ Web3Copilot is an artificial intelligence tool developed using [Council by Chain
   - `npm i -g md-to-pdf`
 - Run `python web3_copilot/doc_retrieval/generate.py`
 
-## Tutorial Jupyter Notebooks
+## Tutorial Jupyter Notebook
 
 ### First Example
-The **notebooks/** directory contains `first_example.ipynb`, an introductory notebook to Council.
-
-To run this notebook:
-- Go to the following [Google Colab](https://colab.research.google.com/drive/15DI-vIaaCPDFr6g49nxugHHqWuugtyRP?usp=sharing) link.
+Go to the following [Google Colab](https://colab.research.google.com/drive/1LnF22bLWDf0TzTMdYTS2IXpYXDf0g4nW?usp=sharing) link.
 - If you would like to edit the notebook, you must first make a copy: Press File -> Save a Copy in Drive.
-
-### Try out Council
-The **notebooks/** directory also contains `council_getting_started.ipynb`, a Council tutorial for creating an Agent with _your own_ Skills and Chains.
-
-To edit and run this notebook:
-- Go to the following [Google Colab](https://colab.research.google.com/drive/1Tg_DCm92nCXEgslKdHwMc3-nj-Tpn6mO?usp=sharing) link.
-- Press File -> Save a Copy in Drive.
 
 ## ETHToronto Presentation
 [Building AI Agents with ‘Council’](https://docs.google.com/presentation/d/1SHmsxBJOSp6tXP67Nv2LivcREJz2pkI6JU9VKnvxtKo/edit?usp=sharing).
